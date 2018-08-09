@@ -212,13 +212,6 @@ function ensureRouteIsObject (route) {
 }
 
 function createBreadcrumbsMeta (staticRoutes) {
-  // const preparedMeta = staticRoutes.map(el => {
-  //   const routesArr = el.split('/')
-  //   const metaText = routesArr[routesArr.length - 1]
-  //   return {[el]: [{url: el, metaText, key: Math.random()}]}
-  // })
-  // return preparedMeta
-  // return staticRoutes
   const breadcrumbs = {}
   staticRoutes.map(el => {
     const routesArr = el.split('/')
