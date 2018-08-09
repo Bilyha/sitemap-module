@@ -231,11 +231,11 @@ function createBreadcrumbsMeta (staticRoutes) {
   const breadcrumbs = {}
   staticRoutes.map(el => {
     const routesArr = el.split('/')
-    const metaText = routesArr[routesArr.length - 1]
+    const text = routesArr[routesArr.length - 1]
     return (breadcrumbs[el] = [
       {
         url: el,
-        metaText,
+        text,
         key: Math.random()
       }
     ])
