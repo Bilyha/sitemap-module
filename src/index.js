@@ -25,6 +25,7 @@ module.exports = function module (moduleOptions) {
 
   // sitemap-routes.json is written to dist dir on build mode
   const jsonStaticRoutesPath = path.resolve(this.options.buildDir, path.join('dist', 'sitemap-routes.json'))
+  const metaDataRoutesPath = path.resolve(this.options.srcDir, path.join('pages', '_metadata.json'))
 
   // sitemap.xml is written to static dir on generate mode
   const xmlGeneratePath = path.resolve(this.options.srcDir, path.join(this.options.dir.static || 'static', options.path))
@@ -72,6 +73,10 @@ module.exports = function module (moduleOptions) {
       // Save static routes
       fs.ensureDirSync(path.resolve(this.options.buildDir, 'dist'))
       fs.writeJsonSync(jsonStaticRoutesPath, staticRoutes)
+      // fs.ensureDirSync(path.resolve(this.options.buildDir, 'static'))
+      // fs.writeJsonSync(metaDataRoutesPath, createBreadcrumbsMeta(staticRoutes))
+      fs.ensureDirSync(path.resolve(this.options.srcDir, 'pages'))
+      fs.writeJsonSync(metaDataRoutesPath, createBreadcrumbsMeta(staticRoutes))
 
       // TODO on generate process only and not on build process
       if (options.generate) {
@@ -204,4 +209,28 @@ function routesUnion (staticRoutes, optionsRoutes) {
 // Make sure a passed route is an object
 function ensureRouteIsObject (route) {
   return typeof route === 'object' ? route : { url: route }
+}
+
+function createBreadcrumbsMeta (staticRoutes) {
+  // const preparedMeta = staticRoutes.map(el => {
+  //   const routesArr = el.split('/')
+  //   const metaText = routesArr[routesArr.length - 1]
+  //   return {[el]: [{url: el, metaText, key: Math.random()}]}
+  // })
+  // return preparedMeta
+  // return staticRoutes
+  const breadcrumbs = {}
+  staticRoutes.map(el => {
+    const routesArr = el.split('/')
+    const metaText = routesArr[routesArr.length - 1]
+    return (breadcrumbs[el] = [
+      {
+        url: el,
+        metaText,
+        key: Math.random()
+      }
+    ])
+  })
+
+  return { breadcrumbs }
 }
